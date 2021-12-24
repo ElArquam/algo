@@ -1,0 +1,94 @@
+ALGORITHM sum_of_distinct_element_inArrays
+VAR
+    arr1 : ARRAY_OF INTEGER[];
+    arr2 : ARRAY_OF INTEGER[];
+    n : INTEGER ;// LENGTH OF THE arr 1
+    m : INTEGER ;//LENGTH OF THE arr2
+    sum1 : INTEGER :=0 ;
+    sum2 : INTEGER :=0 ;
+    sum_arr1 : INTEGER := 0;
+    sum_arr2 : INTEGER := 0; 
+    sum_distinct : INTEGER;
+    i,j : INTEGER;
+BEGIN
+    // puting values in arr1
+    FOR i FROM 0 TO n-1 STEP 1  DO
+        Write("enter the element : ",i+1)
+        Read(arr1[i])
+    END_FOR
+    // puting values in arr2
+    FOR i FROM 0 TO m-1 STEP 1  DO
+        Write("enter the element : ",i+1)
+        Read(arr2[i])
+    END_FOR
+    // comparaison of tne elements in both arrays 
+    // find values that are equals in both arrays
+    FOR i FROM 0 TO n-1 STEP 1  DO
+        FOR j FROM 0 TO m-1 STEP 1  DO
+            IF (arr1[i]!=arr2[j]) THEN
+                sum1 := sum1 + arr1[i] + arr2[j]
+            END_IF
+        END_FOR
+    END_FOR
+    
+    // calculate the sum of all elements in array
+    FOR i FROM 0 TO n-1 STEP 1  DO
+        sum_arr1 := sum_arr1 + arr1[i]
+    END_FOR
+    FOR i FROM 0 TO m-1 STEP 1  DO
+        sum_arr2 := sum_arr2 + arr2[i]
+    END_FOR
+    sum2 := sum_arr1 + sum_arr2 ;
+    // the sum of all distinct element is the difference between sum2 et sum 1
+    sum_distinct := sum2 - sum1 
+    Write("the sum of all distinct element from 2 given set is : ",sum_distinct)
+END
+
+// SOLUTION 2 USING HASH TABLE 
+
+ALGORITHM sum_of_distinct_element_inArrays
+VAR
+    htap : HASH_TABLE<INTEGER,INTEGER>;
+    arr1 : ARRAY_OF INTEGER[];
+    arr2 : ARRAY_OF INTEGER[];
+    arr : ARRAY_OF INTEGER[];
+    n : INTEGER ;// LENGTH OF THE arr 1
+    m : INTEGER ;//LENGTH OF THE arr2
+    sum : INTEGER:=0;
+    i:INTEGER;
+    count:INTEGER;
+BEGIN
+    // puting values in arr1
+    FOR i FROM 0 TO n-1 STEP 1  DO
+        Write("enter the element : ",i+1)
+        Read(arr1[i])
+    END_FOR
+    // puting values in arr2
+    FOR i FROM 0 TO m-1 STEP 1  DO
+        Write("enter the element : ",i+1)
+        Read(arr2[i])
+    END_FOR
+    //concatenate both arrays in one array
+    FOR i FROM 0 TO n-1 STEP 1  DO
+        arr[i] := arr1[i]
+    END_FOR
+    FOR i FROM 0 TO m-1 STEP 1  DO
+        arr[i+n] := arr1[i]
+    END_FOR
+    // we use a count to increment it if the arr[i] is repeated
+    FOR i FROM 0 TO m+n-1 STEP 1  DO
+        IF (htap.lookup(arr[i])= TRUE) THEN
+            count := htap.get(arr[i]);
+            htap.insert(arr[i],count+1)
+        ELSE
+            htap.insert(arr[i],1)   
+        END_IF
+    END_FOR
+    // now we loop to get the sum of distinct elements
+    FOR i FROM 0 TO m+n-1 STEP 1  DO
+        IF (htap.get(arr[i])= 1) THEN
+            sum := sum + arr[i]   
+        END_IF
+    END_FOR
+    Write("the sum of distinct elements is : ",sum)
+END
